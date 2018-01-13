@@ -23,10 +23,14 @@ import com.ellekay.lucie.diabetes.Application;
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.GlucoseAdapter;
 import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
+
 import com.ellekay.lucie.diabetes.models.Doctor;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.models.Reminder;
+
+import com.ellekay.lucie.diabetes.models.Glucose;
+import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
 import com.ellekay.lucie.diabetes.views.History;
 import com.ellekay.lucie.diabetes.views.TakeReadings;
@@ -51,8 +55,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HistoryFragement extends Fragment {
     private Context mContext;
     private List<Readings> readingList = new ArrayList<>();
+
     private List<Reminder> reminderList = new ArrayList<>();
     private List<Doctor> doctorList = new ArrayList<>();
+
     private RecyclerView recyclerView;
     private ReadingAdapter mAdapter;
     FloatingActionButton fab;
@@ -82,6 +88,8 @@ public class HistoryFragement extends Fragment {
                 .Builder(getActivity())
                 .deleteRealmIfMigrationNeeded()
                 .build();
+        //mRealmConfig = new RealmConfiguration.Builder(getActivity()).build();
+
         Realm.setDefaultConfiguration(mRealmConfig);
         mRealm = Realm.getDefaultInstance();
 
@@ -111,6 +119,7 @@ public class HistoryFragement extends Fragment {
             setupRecyclerViewRealm(recyclerView, glucoseRealmResults);
         }
         getDoctorList();
+
         return rootView;
     }
 
@@ -124,6 +133,7 @@ public class HistoryFragement extends Fragment {
         super.onDetach();
     }
 
+
     private void getReadingListRetrofit(){
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
         apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
@@ -131,8 +141,16 @@ public class HistoryFragement extends Fragment {
             public void onResponse(Call<List<Readings>> call, Response<List<Readings>> response) {
                 if (response.isSuccessful()) {
                     readingList = response.body();
+
                     Log.d(TAG,"Retrofit"+ readingList.toString());
                     executeRealm(readingList);
+
+                    executeRealm(readingList);
+
+                    Log.d(TAG,"Retrofit"+ readingList.toString());
+                    mAdapter = new ReadingAdapter(readingList);
+                    recyclerView.setAdapter(mAdapter);
+
                     Log.d(TAG,"Retrofit: Response successful ");
                 }else {
                     //error
@@ -169,10 +187,12 @@ public class HistoryFragement extends Fragment {
         });
     }
 
+
     public class ReadingTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog progressDialog;
         @Override
         protected Void doInBackground(Void... params) {
+
             getReadingListRetrofit();
             return null;
         }
@@ -209,6 +229,7 @@ public class HistoryFragement extends Fragment {
                    glucose.setCreatedAt(glucoseReading.get(i).getCreatedAt());
                    glucose.setUpdatedAt(glucoseReading.get(i).getUpdatedAt());
                    glucose.setUser(glucoseReading.get(i).getUser());
+
                }
            }
 
@@ -216,7 +237,11 @@ public class HistoryFragement extends Fragment {
 
                @Override
                public void onSuccess() {
+
                   // Log.d("Realm","savedRealmObjects");
+
+                   Log.d("Realm","savedRealmObjects");
+
                }
            },new Realm.Transaction.OnError(){
                @Override
@@ -228,6 +253,7 @@ public class HistoryFragement extends Fragment {
     }
 
     private RealmResults<Glucose> getRealmResults() {
+
         RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class).findAllSorted("id", Sort.DESCENDING).distinct("id");
         //Log.d("Realm","Realm size (sorted) : " + sortedGlucose.size());
         return sortedGlucose;
@@ -238,6 +264,37 @@ public class HistoryFragement extends Fragment {
         recyclerView.setAdapter(new GlucoseAdapter(results));
     }
 
+    private void initiateRealmApi(final RecyclerView recyclerView){
+        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
+        apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
+            @Override
+            public void onResponse(Call<List<Readings>> call, Response<List<Readings>> response) {
+                if (response.isSuccessful()) {
+                    response.body();
+                    readingList = response.body();
+                    executeRealm(readingList);
+
+                    Log.d("Realm",""+ readingList.toString());
+                    mAdapter = new ReadingAdapter(readingList);
+                    recyclerView.setAdapter(mAdapter);
+
+                    Log.d(TAG,"Realm: Response successful ");
+                }else {
+                    //error
+                    Log.d("Realm","Response not successful");
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Readings>> call, Throwable t) {
+                //doesnt execute
+                Log.d("Retrofit","after reading function" + t);
+            }
+        });
+    }
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, RealmResults<Glucose> results) {
+       // progessBar.setVisibility(View.GONE);
+        recyclerView.setAdapter(new GlucoseAdapter(results));
+    }
 
 }
 

@@ -109,7 +109,8 @@ public class TrendsFragment extends Fragment {
             Log.d(TAG, "" +newDate.getTime());
             dataPoints[i] = new DataPoint(newDate.getTime(), glucoseRealmResults.get(i).getGlucoseLevel());
         }
-        Log.d(TAG, "Realm size graph: "+ glucoseRealmResults.size());
+
+        Log.d(TAG, "size"+ glucoseRealmResults.size());
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
         graph.addSeries(series);
@@ -120,6 +121,7 @@ public class TrendsFragment extends Fragment {
         graph.getGridLabelRenderer().setHumanRounding(false);
         graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
 
+        graph.getGridLabelRenderer().setNumHorizontalLabels(4); // only 4 because of the space
         return v;
     }
 

@@ -5,14 +5,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
 import android.text.format.DateFormat;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 import android.widget.TextView;
 
 import com.ellekay.lucie.diabetes.R;
@@ -41,11 +44,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+import com.ellekay.lucie.diabetes.R;
+import com.ellekay.lucie.diabetes.views.Overview;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by lucie on 10/1/2017.
  */
 
 public class OverviewFragment extends Fragment {
+
     private Context mContext;
     private List<Readings> readingList = new ArrayList<>();
     private ReadingAdapter mAdapter;
@@ -57,9 +71,11 @@ public class OverviewFragment extends Fragment {
     Date firstDatex = new Date();
     Date endDatex = new Date();
 
+
     public static OverviewFragment newInstance(){
         OverviewFragment fragement = new OverviewFragment();
         return fragement;
+
     }
 
     @Override
@@ -71,6 +87,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.overview_fragment, container, false);
+
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
         TextView lastcheck = (TextView) v.findViewById(R.id.tv_lastcheck);
 
@@ -170,6 +187,18 @@ public class OverviewFragment extends Fragment {
         graph.getViewport().setXAxisBoundsManual(true);
 
         lastcheck.setText("Last check: "+maxReading + " mg/dL");
+
+//
+//        GraphView graph = (GraphView) v.findViewById(R.id.graph);
+////        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(0, 1),
+//                new DataPoint(1, 5),
+//                new DataPoint(2, 3),
+//                new DataPoint(3, 2),
+//                new DataPoint(4, 6)
+//
+//        });
+//        graph.addSeries(series);
         return v;
     }
 
@@ -182,6 +211,7 @@ public class OverviewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
 
     private void getReadingList(){
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
@@ -277,4 +307,5 @@ public class OverviewFragment extends Fragment {
         });
         return readingList;
     }
+
 }

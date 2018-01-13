@@ -3,11 +3,13 @@ package com.ellekay.lucie.diabetes.models;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 
+
 /**
  * Created by lucie on 11/16/2017.
  */
 
 public class Glucose extends RealmObject {
+
     @Index
     public Integer id;
 

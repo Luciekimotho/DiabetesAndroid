@@ -13,6 +13,8 @@ import com.ellekay.lucie.diabetes.models.Profile;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.models.Reminder;
 
+import com.ellekay.lucie.diabetes.models.Profile;
+import com.ellekay.lucie.diabetes.models.Readings;
 import java.util.List;
 
 import okhttp3.OkHttpClient;

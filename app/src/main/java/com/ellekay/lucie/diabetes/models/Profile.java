@@ -21,6 +21,7 @@ public class Profile {
     @Expose
     private String dateOfBirth;
 
+
     @SerializedName("height")
     @Expose
     private int height;
