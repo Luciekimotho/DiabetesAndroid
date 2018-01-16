@@ -175,10 +175,9 @@ public class OverviewFragment extends Fragment {
 
         // set date label formatter
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 4 because of the space
-
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getGridLabelRenderer().setHumanRounding(false);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
 
         // set manual x bounds to have nice steps
         graph.getViewport().setMinX(firstDatex.getTime());
@@ -187,18 +186,6 @@ public class OverviewFragment extends Fragment {
         graph.getViewport().setXAxisBoundsManual(true);
 
         lastcheck.setText("Last check: "+maxReading + " mg/dL");
-
-//
-//        GraphView graph = (GraphView) v.findViewById(R.id.graph);
-////        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//                new DataPoint(0, 1),
-//                new DataPoint(1, 5),
-//                new DataPoint(2, 3),
-//                new DataPoint(3, 2),
-//                new DataPoint(4, 6)
-//
-//        });
-//        graph.addSeries(series);
         return v;
     }
 

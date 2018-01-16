@@ -10,15 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.fragments.HistoryFragement;
 import com.ellekay.lucie.diabetes.fragments.OverviewFragment;
-import com.ellekay.lucie.diabetes.fragments.TrendsFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ellekay.lucie.diabetes.fragments.ReminderFragment;
 
 public class Home extends AppCompatActivity {
 
@@ -38,7 +34,7 @@ public class Home extends AppCompatActivity {
                     break;
                 case R.id.navigation_reminders:
                     //mTextMessage.setText(R.string.trends);
-                    fragment = TrendsFragment.newInstance();
+                    fragment = ReminderFragment.newInstance();
                     title = "Reminders";
                     break;
                 case R.id.navigation_history:

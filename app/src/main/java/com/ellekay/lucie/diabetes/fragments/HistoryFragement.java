@@ -88,7 +88,6 @@ public class HistoryFragement extends Fragment {
                 .Builder(getActivity())
                 .deleteRealmIfMigrationNeeded()
                 .build();
-        //mRealmConfig = new RealmConfiguration.Builder(getActivity()).build();
 
         Realm.setDefaultConfiguration(mRealmConfig);
         mRealm = Realm.getDefaultInstance();
@@ -118,7 +117,7 @@ public class HistoryFragement extends Fragment {
         }else {
             setupRecyclerViewRealm(recyclerView, glucoseRealmResults);
         }
-        getDoctorList();
+        getReminderList();
 
         return rootView;
     }
@@ -165,14 +164,13 @@ public class HistoryFragement extends Fragment {
         });
     }
 
-    private void getDoctorList(){
-        Log.d(TAG, "After");
+    private void getReminderList(){
         ApiClient apiClient2 = ApiClient.Factory.getInstance(mContext);
-        apiClient2.getDoctors().enqueue(new Callback<List<Doctor>>() {
+        apiClient2.getReminders().enqueue(new Callback<List<Reminder>>() {
             @Override
-            public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+            public void onResponse(Call<List<Reminder>> call, Response<List<Reminder>> response) {
                 if (response.isSuccessful()){
-                    doctorList = response.body();
+                    reminderList = response.body();
                     Log.d(TAG, "Reminder list: "+reminderList.toString());
                     Log.d(TAG, "Reminder list: Response successful ");
                 }else {
@@ -181,7 +179,7 @@ public class HistoryFragement extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Doctor>> call, Throwable t) {
+            public void onFailure(Call<List<Reminder>> call, Throwable t) {
                 Log.d(TAG, "Reminder list error: " + t);
             }
         });
@@ -263,7 +261,6 @@ public class HistoryFragement extends Fragment {
         // progessBar.setVisibility(View.GONE);
         recyclerView.setAdapter(new GlucoseAdapter(results));
     }
-
     private void initiateRealmApi(final RecyclerView recyclerView){
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
         apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
