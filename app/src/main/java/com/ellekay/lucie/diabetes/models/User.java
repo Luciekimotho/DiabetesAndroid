@@ -4,10 +4,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by lucie on 1/10/2018.
+ * Created by lucie on 1/18/2018.
  */
 
-public class Doctor {
+public class User {
+
     @SerializedName("id")
     @Expose
     private int id;
@@ -20,22 +21,17 @@ public class Doctor {
     @Expose
     private String email;
 
-    @SerializedName("phone")
+    @SerializedName("password")
     @Expose
-    private String phone;
-
-    @SerializedName("notes")
-    @Expose
-    private String notes;
+    private String password;
 
     @Override
     public String toString() {
-        return "Doctor{" +
+        return "Profile{" +
                 "id=" + id +
-                ", doctor='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", notes='" + notes + '\'' +
+                ", name='" + name + '\'' +
+                ", name='" + email + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 
@@ -63,19 +59,11 @@ public class Doctor {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

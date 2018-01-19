@@ -2,6 +2,8 @@ package com.ellekay.lucie.diabetes.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,11 @@ import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import android.widget.TextView;
@@ -23,7 +27,13 @@ import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
+import com.ellekay.lucie.diabetes.views.GraphActivity;
 import com.ellekay.lucie.diabetes.views.Overview;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -59,17 +69,15 @@ import java.util.List;
  */
 
 public class OverviewFragment extends Fragment {
-
     private Context mContext;
     private List<Readings> readingList = new ArrayList<>();
     private ReadingAdapter mAdapter;
+    RealmResults<Glucose> glucoseRealmResults;
 
     private RealmConfiguration mRealmConfig;
     private Realm mRealm;
     String TAG = "Diabetes";
-
-    Date firstDatex = new Date();
-    Date endDatex = new Date();
+    LineChart chart;
 
 
     public static OverviewFragment newInstance(){
@@ -87,9 +95,29 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.overview_fragment, container, false);
+        chart = (LineChart) v.findViewById(R.id.chart);
 
-        GraphView graph = (GraphView) v.findViewById(R.id.graph);
         TextView lastcheck = (TextView) v.findViewById(R.id.tv_lastcheck);
+
+        mRealmConfig = new RealmConfiguration
+                .Builder(getActivity())
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        Realm.setDefaultConfiguration(mRealmConfig);
+        mRealm = Realm.getDefaultInstance();
+
+        glucoseRealmResults = getRealmResults();
+
+        if (glucoseRealmResults.size() == 0){
+            getReadingList();
+        }else {
+            readingList = initiateRealmApi();
+        }
+
+        setData();
+
+
 
         Spinner sp_time = (Spinner) v.findViewById(R.id.timespinner);
         List<String> timePeriods = new ArrayList<>();
@@ -115,77 +143,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        mRealmConfig = new RealmConfiguration
-                .Builder(getActivity())
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        Realm.setDefaultConfiguration(mRealmConfig);
-        mRealm = Realm.getDefaultInstance();
-
-        final RealmResults<Glucose> glucoseRealmResults = getRealmResults();
-
-        if (glucoseRealmResults.size() == 0){
-            getReadingList();
-            Log.d("Diabetes","Retrofit");
-        }else {
-            readingList = initiateRealmApi();
-            Log.d(TAG, ""+ readingList.size());
-            Log.d("Diabetes","Realm");
-        }
-        String firstDate = null, endDate = null;
-        String minReading = null, maxReading = null;
-        String label;
-        DataPoint[] dataPoints = new DataPoint[glucoseRealmResults.size()];
-        Date newDate = new Date();
-
-        for (int i = 0; i<glucoseRealmResults.size(); i++){
-            String date = glucoseRealmResults.get(i).getTimeOfDay();
-            Log.d(TAG, "raw date is: "+date);
-
-            firstDate = glucoseRealmResults.get(0).getTimeOfDay();
-            endDate = glucoseRealmResults.get(glucoseRealmResults.size()-1).getTimeOfDay();
-
-            minReading = glucoseRealmResults.get(0).getGlucoseLevel().toString();
-            maxReading = glucoseRealmResults.get(glucoseRealmResults.size()-1).getGlucoseLevel().toString();
-
-            String format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-
-            try {
-                newDate = sdf.parse(date);
-                firstDatex = sdf.parse(firstDate);
-                endDatex = sdf.parse(endDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                Log.e("Retrofit", ""+e);
-            }
-
-            Log.d(TAG, ""+ glucoseRealmResults.get(i).getGlucoseLevel() );
-            Log.d(TAG, ""+ glucoseRealmResults.get(i).getId() );
-            Log.d(TAG, "date: " +newDate.getTime());
-            label = DateFormat.format("dd/MM hh:mm", newDate).toString();
-
-            dataPoints[i] = new DataPoint(newDate.getTime(), glucoseRealmResults.get(i).getGlucoseLevel());
-        }
-        Log.d(TAG, "Realm size graph: "+ glucoseRealmResults.size());
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
-        graph.addSeries(series);
-
-        // set date label formatter
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getGridLabelRenderer().setHumanRounding(false);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
-
-        // set manual x bounds to have nice steps
-        graph.getViewport().setMinX(firstDatex.getTime());
-        graph.getViewport().setMaxX(endDatex.getTime());
-        Log.d(TAG, "First date: "+firstDatex);
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        lastcheck.setText("Last check: "+maxReading + " mg/dL");
+        lastcheck.setText("Last check: "+ "" + " mg/dL");
         return v;
     }
 
@@ -198,7 +156,6 @@ public class OverviewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 
     private void getReadingList(){
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
@@ -226,7 +183,6 @@ public class OverviewFragment extends Fragment {
     }
 
     private void executeRealm(final List<Readings> glucoseReading){
-        Log.d(TAG,"Realm size is:" + glucoseReading.size());
         mRealm.executeTransactionAsync(new Realm.Transaction() {
                                            @Override
                                            public void execute(Realm realm) {
@@ -259,6 +215,7 @@ public class OverviewFragment extends Fragment {
                                            }
                                        }
         );
+        Log.d(TAG,"Realm size is:" + glucoseReading.size());
     }
 
     private RealmResults<Glucose> getRealmResults() {
@@ -276,23 +233,70 @@ public class OverviewFragment extends Fragment {
                     response.body();
                     readingList = response.body();
                     executeRealm(readingList);
-
-                    Log.d("Realm",""+ readingList.toString());
-                    mAdapter = new ReadingAdapter(readingList);
-
-                    Log.d(TAG,"Realm: Response successful ");
                 }else {
-                    //error
                     Log.d("Realm","Response not successful");
                 }
             }
             @Override
             public void onFailure(Call<List<Readings>> call, Throwable t) {
-                //doesnt execute
                 Log.d("Retrofit","after reading function" + t);
             }
         });
         return readingList;
+    }
+
+    private void setData() {
+        Date newDate = new Date();
+        List<Entry> entries = new ArrayList<Entry>();
+        ArrayList<String> labels = new ArrayList<String>();
+        String label;
+
+        for (int i = 0; i<glucoseRealmResults.size(); i++){
+            String date = glucoseRealmResults.get(i).getTimeOfDay();
+
+            String format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+
+            try {
+                newDate = sdf.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Log.e("Retrofit", ""+e);
+            }
+
+            Log.d(TAG,"Dates"+ String.valueOf(newDate.getTime()));
+
+            label = DateFormat.format("dd/MM", newDate).toString();
+            newDate.toString();
+            entries.add(new Entry(newDate.getTime(), glucoseRealmResults.get(i).getGlucoseLevel().intValue()));
+            labels.add(label);
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Glucose levels over time"); // add entries to dataset
+        Log.d(TAG,"Data set"+ String.valueOf(dataSet));
+        //chart.setDescription("Glucose readings");
+
+        dataSet.setFillAlpha(110);
+        dataSet.setColor(Color.BLACK);
+        dataSet.setCircleColor(Color.BLACK);
+        dataSet.setLineWidth(1f);
+        dataSet.setCircleRadius(3f);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setValueTextSize(9f);
+        dataSet.setDrawFilled(true);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(dataSet); // add the datasets
+
+        // create a data object with the datasets
+        LineData data = new LineData(labels, dataSets);
+
+        // set data
+        chart.setData(data);
+        chart.setDrawGridBackground(false);
+        chart.setTouchEnabled(true);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
     }
 
 }

@@ -31,7 +31,7 @@ public class Caregiver {
 
     @Override
     public String toString() {
-        return "Profile{" +
+        return "Caregiver{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

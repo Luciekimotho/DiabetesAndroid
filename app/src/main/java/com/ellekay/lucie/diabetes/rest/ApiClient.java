@@ -15,6 +15,9 @@ import com.ellekay.lucie.diabetes.models.Reminder;
 
 import com.ellekay.lucie.diabetes.models.Profile;
 import com.ellekay.lucie.diabetes.models.Readings;
+import com.ellekay.lucie.diabetes.models.Token;
+import com.ellekay.lucie.diabetes.models.User;
+
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -37,15 +40,19 @@ public interface ApiClient {
 
     String API_URL = "https://diabetesapi.herokuapp.com/";
 
-    @GET("users")
+    @FormUrlEncoded
+    @POST("login")
+    Call<User>  login(@Field("user") String user,@Field("password") String password );
+
+    @GET("patients")
     Call<List<Profile>> getUsers();
 
-    @GET("user/{id}")
+    @GET("patient/{id}")
     Call<Profile> getUser(@Path("id") String id);
 
     @FormUrlEncoded
-    @POST("users/new")
-    Call<Profile> createUser(@Field("email") String email,@Field("password") String password );
+    @POST("user/new")
+    Call<User> createUser(@Field("name") String name,@Field("email") String email, @Field("password") String password );
 
     @GET("readings")
     Call<List<Readings>> getReadings();

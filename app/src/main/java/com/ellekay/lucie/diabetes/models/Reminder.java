@@ -27,14 +27,13 @@ public class Reminder {
 
     @Override
     public String toString() {
-        return "Profile{" +
+        return "Reminder{" +
                 "id=" + id +
                 ", reminder='" + reminder + '\'' +
                 ", alarm='" + alarm + '\'' +
                 ", user=" + user +
                 '}';
     }
-
 
     public int getId() {
         return id;

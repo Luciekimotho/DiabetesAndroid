@@ -42,10 +42,6 @@ public class Overview extends AppCompatActivity {
         });
 
         getReadingList();
-
-
-
-
     }
 
     private void getReadingList(){
