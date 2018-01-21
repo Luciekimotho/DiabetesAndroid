@@ -13,13 +13,13 @@
         android:id="@+id/linearlayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#F3F1F2"
+        android:background="@mipmap/gradient_bg3"
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,72 +29,91 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="80dp"
-            app:srcCompat="@drawable/diabetes" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="70dp"
             android:text="@string/login"
             android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="#fff"
             android:textSize="30sp"
             android:textStyle="bold" />
 
 
-
-        <EditText
-            android:id="@+id/et_email"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:layout_marginBottom="15dp"
-            android:background="#fff"
-            android:fontFamily="serif"
-            android:padding="16dp" />
+            android:layout_marginTop="30dp"
+            app:cardBackgroundColor="#fcfcfc"
+            app:cardCornerRadius="4dp"
+            app:contentPadding="25dp">
 
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:fontFamily="serif"
-            android:hint="@string/pass"
-            android:inputType="textPassword"
-            android:padding="16dp" />
+            <LinearLayout
+                android:id="@+id/linearlayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnLogInActivity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@color/colorPrimary"
-            android:fontFamily="serif"
-            android:onClick="logIn"
-            android:text="@string/login"
-            android:textColor="@color/mdtp_white" />
+                <!--<ImageView-->
+                <!--android:id="@+id/imageView"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="72dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="30dp"-->
+                <!--app:srcCompat="@drawable/diabetes" />-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:fontFamily="sans-serif"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:hint="@string/pass"
+                        android:inputType="textPassword" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnLogInActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="logIn"
+                    android:text="@string/login"
+                    android:textColor="@color/mdtp_white" />
 
 
-        <Button
-            android:id="@+id/btn_signin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@color/colorPrimary"
-            android:fontFamily="serif"
-            android:text="@string/sign_up"
-            android:textColor="@color/mdtp_white" />
+                <Button
+                    android:id="@+id/btn_signin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/mdtp_white" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
     </LinearLayout>

@@ -53,18 +53,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HistoryFragement extends Fragment {
+    private RealmConfiguration mRealmConfig;
+    private Realm mRealm;
+    String TAG = "Diabetes";
+
     private Context mContext;
-    public List<Readings> readingList = new ArrayList<>();
-    private List<Doctor> doctorList = new ArrayList<>();
+    private List<Readings> readingList = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private ReadingAdapter mAdapter;
     FloatingActionButton fab;
-    ReadingTask readingTask;
-
-    private RealmConfiguration mRealmConfig;
-    private Realm mRealm;
-    String TAG = "Diabetes";
+    //ReadingTask readingTask;
 
     public static HistoryFragement newInstance(){
         HistoryFragement fragement = new HistoryFragement();
@@ -105,16 +104,18 @@ public class HistoryFragement extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        getReadingListRetrofit();
         final RealmResults<Glucose> glucoseRealmResults = getRealmResults();
+
+        getReadingListRetrofit();
+
         final List<Readings> glucoseList = getReadingListRetrofit();
 
         Log.d(TAG, "Realm size list: "+ glucoseRealmResults.size());
-        Log.d(TAG, "Retrofit size list: "+ glucoseList.size());
+        Log.d(TAG, "Retrofit size list: "+ getReadingListRetrofit().size());
 
        // getReadingListRetrofitRecycler();
         if (glucoseRealmResults.size() == 0){
-           setupRecyclerViewRetrofit(recyclerView, glucoseList);
+           setupRecyclerViewRetrofit(recyclerView, readingList);
         }else {
             setupRecyclerViewRealm(recyclerView, glucoseRealmResults);
             Log.d(TAG, "Realm");
@@ -177,32 +178,37 @@ public class HistoryFragement extends Fragment {
     }
 
 
-    public class ReadingTask extends AsyncTask<Void, Void, Void> {
-        ProgressDialog progressDialog;
-        @Override
-        protected Void doInBackground(Void... params) {
+//    public class ReadingTask extends AsyncTask<Void, Void, Void> {
+//        ProgressDialog progressDialog;
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            //getReadingListRetrofit();
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            progressDialog = ProgressDialog.show(getActivity(),"ProgressDialog","Wait!");
+//            //Toast.makeText(getActivity(),"Progress Start",Toast.LENGTH_LONG).show();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            //Toast.makeText(getActivity(),"Progress Ended", Toast.LENGTH_LONG).show();
+//            progressDialog.dismiss();
+//        }
+//    }
 
-            getReadingListRetrofit();
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),"ProgressDialog","Wait!");
-            //Toast.makeText(getActivity(),"Progress Start",Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            //Toast.makeText(getActivity(),"Progress Ended", Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
-        }
+    private RealmResults<Glucose> getRealmResults() {
+        RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class)
+                .findAllSorted("id", Sort.DESCENDING).distinct("id");
+        Log.d("Realm","Realm size (sorted) : " + sortedGlucose.size());
+        return sortedGlucose;
     }
 
     private void executeRealm(final List<Readings> glucoseReading){
-        Log.d(TAG,"Realm size is:" + glucoseReading.size());
         mRealm.executeTransactionAsync(new Realm.Transaction() {
            @Override
            public void execute(Realm realm) {
@@ -225,7 +231,6 @@ public class HistoryFragement extends Fragment {
 
                @Override
                public void onSuccess() {
-                  // Log.d("Realm","savedRealmObjects");
                    Log.d("Realm","savedRealmObjects");
                }
            },new Realm.Transaction.OnError(){
@@ -235,13 +240,10 @@ public class HistoryFragement extends Fragment {
                }
            }
         );
+        Log.d(TAG,"Realm size is:" + glucoseReading.size());
     }
 
-    private RealmResults<Glucose> getRealmResults() {
-        RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class).findAllSorted("id", Sort.DESCENDING).distinct("id");
-        //Log.d("Realm","Realm size (sorted) : " + sortedGlucose.size());
-        return sortedGlucose;
-    }
+
 
     private void setupRecyclerViewRealm(final RecyclerView recyclerView, RealmResults<Glucose> results){
         recyclerView.setAdapter(new GlucoseAdapter(results));

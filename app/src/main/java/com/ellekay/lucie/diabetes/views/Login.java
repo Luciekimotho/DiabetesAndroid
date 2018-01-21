@@ -26,6 +26,7 @@ public class Login extends AppCompatActivity {
     String TAG = "login";
     EditText etEmail, etPassword;
     String email, password;
+    Button signup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +37,34 @@ public class Login extends AppCompatActivity {
 
         etEmail = (EditText) findViewById(R.id.et_email);
         etPassword = (EditText) findViewById(R.id.et_password);
+        signup = (Button) findViewById(R.id.btn_signin);
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),SignUp.class));
+            }
+        });
     }
 
     public void logIn(View view){
-
         email = etEmail.getText().toString();
         password = etPassword.getText().toString().trim();
 
-        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.login(email, password).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Log.d(TAG,"Login successful");
-                startActivity(new Intent(getApplicationContext(),UserProfile.class));
-            }
+//        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
+//        apiClient.login(email, password).enqueue(new Callback<User>() {
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                Log.d(TAG,"Login successful");
+//                startActivity(new Intent(getApplicationContext(),UserProfile.class));
+//            }
+//
+//            @Override
+//            public void onFailure(Call<User> call, Throwable t) {
+//                Log.d(TAG,"Login not succesful"+t.getMessage());
+//            }
+//        });
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d(TAG,"Login not succesful"+t.getMessage());
-            }
-        });
-
-
+        startActivity(new Intent(getApplicationContext(),UserProfile.class));
     }
 
 }

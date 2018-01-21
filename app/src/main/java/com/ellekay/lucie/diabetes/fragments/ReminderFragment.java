@@ -72,22 +72,6 @@ public class ReminderFragment extends Fragment {
 
 
     private void getReminderList(){
-        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.getReminders().enqueue(new Callback<List<Reminder>>() {
-            @Override
-            public void onResponse(Call<List<Reminder>> call, Response<List<Reminder>> response) {
-                if (response.isSuccessful()) {
-                    reminderList = response.body();
 
-                }else {
-                    Log.d(TAG,"Reminder: Response not successful");
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Reminder>> call, Throwable t) {
-                //doesn't execute
-                Log.d(TAG,"Reminder: Failure" + t);
-            }
-        });
     }
 }

@@ -1,5 +1,6 @@
 package com.ellekay.lucie.diabetes.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.models.Readings;
@@ -25,6 +27,7 @@ import retrofit2.Response;
 public class Overview extends AppCompatActivity {
     private Overview mContext;
     private List<Readings> readingList = new ArrayList<>();
+    Button testBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,13 @@ public class Overview extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+        testBtn = (Button) findViewById(R.id.test_btn);
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Overview.this,DoctorActivity.class));
             }
         });
 

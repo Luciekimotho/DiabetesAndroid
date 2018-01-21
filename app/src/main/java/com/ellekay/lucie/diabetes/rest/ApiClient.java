@@ -42,7 +42,7 @@ public interface ApiClient {
 
     @FormUrlEncoded
     @POST("login")
-    Call<User>  login(@Field("user") String user,@Field("password") String password );
+    Call<User>login(@Field("user") String user,@Field("password") String password );
 
     @GET("patients")
     Call<List<Profile>> getUsers();
@@ -89,6 +89,16 @@ public interface ApiClient {
     Call<Readings> newReading(@Field("glucoseLevel") Integer glucoseLevel, @Field("timePeriod") String timePeriod,
                               @Field("action") String action, @Field("medication") String medication,
                               @Field("notes") String notes, @Field("user") Integer user);
+
+    @FormUrlEncoded
+    @POST("reminder/")
+    Call<Reminder> newReminder(@Field("reminder") String reminder, @Field("alarm") Boolean alarm,
+                               @Field("user") Integer user);
+
+    @FormUrlEncoded
+    @POST("caregiver/")
+    Call<Caregiver> newCaregiver(@Field("relation") String relation, @Field("phone") String phone,
+                               @Field("user") Integer user);
 
     class Factory{
 
