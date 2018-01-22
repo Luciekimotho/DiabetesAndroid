@@ -59,4 +59,7 @@
     <string name="tips">Tips</string>
     <string name="title_activity_doctor">Doctor</string>
     <string name="title_activity_caregiver">CaregiverActivity</string>
+    <string name="doctor_name">Doctor\'s name</string>
+    <string name="doctor_email" />
+    <string name="doctor_phone">Doctor\'s phone</string>
 </resources>

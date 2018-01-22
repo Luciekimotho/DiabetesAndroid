@@ -27,6 +27,7 @@ import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
+import com.ellekay.lucie.diabetes.views.DoctorActivity;
 import com.ellekay.lucie.diabetes.views.GraphActivity;
 import com.ellekay.lucie.diabetes.views.Overview;
 import com.github.mikephil.charting.charts.LineChart;
@@ -78,7 +79,7 @@ public class OverviewFragment extends Fragment {
     private Realm mRealm;
     String TAG = "Diabetes";
     LineChart chart;
-
+    Button testBtn;
 
     public static OverviewFragment newInstance(){
         OverviewFragment fragement = new OverviewFragment();
@@ -98,6 +99,14 @@ public class OverviewFragment extends Fragment {
         chart = (LineChart) v.findViewById(R.id.chart);
 
         TextView lastcheck = (TextView) v.findViewById(R.id.tv_lastcheck);
+
+        testBtn = (Button) v.findViewById(R.id.test_btn);
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),DoctorActivity.class));
+            }
+        });
 
         mRealmConfig = new RealmConfiguration
                 .Builder(getActivity())

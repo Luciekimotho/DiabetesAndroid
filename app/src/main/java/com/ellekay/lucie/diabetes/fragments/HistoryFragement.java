@@ -106,18 +106,10 @@ public class HistoryFragement extends Fragment {
 
         final RealmResults<Glucose> glucoseRealmResults = getRealmResults();
 
-        getReadingListRetrofit();
-
-        final List<Readings> glucoseList = getReadingListRetrofit();
-
-        Log.d(TAG, "Realm size list: "+ glucoseRealmResults.size());
-        Log.d(TAG, "Retrofit size list: "+ getReadingListRetrofit().size());
-
-       // getReadingListRetrofitRecycler();
         if (glucoseRealmResults.size() == 0){
-           setupRecyclerViewRetrofit(recyclerView, readingList);
+            initiateApi(recyclerView);
         }else {
-            setupRecyclerViewRealm(recyclerView, glucoseRealmResults);
+            setupRecyclerView(recyclerView, glucoseRealmResults);
             Log.d(TAG, "Realm");
         }
 
@@ -134,49 +126,25 @@ public class HistoryFragement extends Fragment {
         super.onDetach();
     }
 
-    private List<Readings> getReadingListRetrofit(){
-        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
-            @Override
-            public void onResponse(Call<List<Readings>> call, Response<List<Readings>> response) {
-                if (response.isSuccessful()) {
-                    readingList = response.body();
-                    executeRealm(readingList);
-                    recyclerView.setAdapter(new ReadingAdapter(readingList));
-                }else {
-                    Log.d(TAG,"Retrofit: Response not successful");
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Readings>> call, Throwable t) {
-                //doesn't execute
-                Log.d(TAG,"Retrofit: after reading function" + t);
-            }
-        });
-        return readingList;
-    }
-    private List<Readings> getReadingListRetrofitRecycler(){
-        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
-            @Override
-            public void onResponse(Call<List<Readings>> call, Response<List<Readings>> response) {
-                if (response.isSuccessful()) {
-                    readingList = response.body();
-                    executeRealm(readingList);
-                    recyclerView.setAdapter(new ReadingAdapter(readingList));
-                }else {
-                    Log.d(TAG,"Retrofit: Response not successful");
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Readings>> call, Throwable t) {
-                //doesn't execute
-                Log.d(TAG,"Retrofit: after reading function" + t);
-            }
-        });
-        return readingList;
-    }
 
+    private void initiateApi(final View recyclerView){
+        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
+        apiClient.getReadings().enqueue(new Callback<List<Readings>>() {
+            @Override
+            public void onResponse(Call<List<Readings>> call, Response<List<Readings>> response) {
+                if (response.isSuccessful()) {
+                    readingList = response.body();
+                    executeRealmWrite(readingList);
+                }else {
+                    Log.d(TAG,"Retrofit: Response not successful");
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Readings>> call, Throwable t) {
+                Log.d(TAG,"Retrofit: after reading function" + t);
+            }
+        });
+    }
 
 //    public class ReadingTask extends AsyncTask<Void, Void, Void> {
 //        ProgressDialog progressDialog;
@@ -201,14 +169,7 @@ public class HistoryFragement extends Fragment {
 //        }
 //    }
 
-    private RealmResults<Glucose> getRealmResults() {
-        RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class)
-                .findAllSorted("id", Sort.DESCENDING).distinct("id");
-        Log.d("Realm","Realm size (sorted) : " + sortedGlucose.size());
-        return sortedGlucose;
-    }
-
-    private void executeRealm(final List<Readings> glucoseReading){
+    private void executeRealmWrite(final List<Readings> glucoseReading){
         mRealm.executeTransactionAsync(new Realm.Transaction() {
            @Override
            public void execute(Realm realm) {
@@ -243,14 +204,32 @@ public class HistoryFragement extends Fragment {
         Log.d(TAG,"Realm size is:" + glucoseReading.size());
     }
 
+    private RealmResults<Glucose> getRealmResults() {
+        RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class)
+                .findAllSorted("id", Sort.DESCENDING).distinct("id");
+        Log.d("Realm","Realm size (sorted) : " + sortedGlucose.size());
+        return sortedGlucose;
+    }
 
+    private void deleteRealmObjects() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(Glucose.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG,"realm objects deleted");
+                initiateApi(recyclerView);
+            }
+        });
+    }
 
-    private void setupRecyclerViewRealm(final RecyclerView recyclerView, RealmResults<Glucose> results){
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, RealmResults<Glucose> results){
         recyclerView.setAdapter(new GlucoseAdapter(results));
     }
-    private void setupRecyclerViewRetrofit(final RecyclerView recyclerView, List<Readings> readingList){
-        recyclerView.setAdapter(new ReadingAdapter(readingList));
-    }
+
 
 }
 

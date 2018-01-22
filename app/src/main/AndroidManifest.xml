@@ -21,11 +21,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.SignUp"
+            android:name=".auth.SignUp"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.Login"
+            android:name=".auth.Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -64,7 +64,8 @@
         <activity
             android:name=".views.CaregiverActivity"
             android:label="@string/title_activity_caregiver"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".views.DoctorDetail"></activity>
     </application>
 
 </manifest>

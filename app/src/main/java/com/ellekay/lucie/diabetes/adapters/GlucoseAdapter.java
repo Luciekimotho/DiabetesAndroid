@@ -1,6 +1,7 @@
 package com.ellekay.lucie.diabetes.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
+import com.ellekay.lucie.diabetes.views.DoctorDetail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +41,7 @@ public class GlucoseAdapter  extends RecyclerView.Adapter<GlucoseAdapter.MyViewH
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.mRealmObject = mRealmObjects.get(position);
         holder.glucoseLevel.setText(mRealmObjects.get(position).getGlucoseLevel().toString() + " mg/dL");
         holder.timePeriod.setText(mRealmObjects.get(position).getTimePeriod());
@@ -58,6 +60,14 @@ public class GlucoseAdapter  extends RecyclerView.Adapter<GlucoseAdapter.MyViewH
             e.printStackTrace();
             Log.e("Retrofit", ""+e);
         }
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle arg = new Bundle();
+                arg.putString(DoctorDetail.ARG_NAME_ID, String.valueOf(holder.mRealmObject.getGlucoseLevel()));
+            }
+        });
+
     }
 
     @Override
@@ -69,9 +79,11 @@ public class GlucoseAdapter  extends RecyclerView.Adapter<GlucoseAdapter.MyViewH
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView glucoseLevel, timePeriod, date;
         public Glucose mRealmObject;
+        public final View mView;
 
         public MyViewHolder(View v) {
             super(v);
+            mView = v;
             glucoseLevel = (TextView) v.findViewById(R.id.glucose_level);
             timePeriod = (TextView) v.findViewById(R.id.timeperiod);
             date = (TextView) v.findViewById(R.id.date);

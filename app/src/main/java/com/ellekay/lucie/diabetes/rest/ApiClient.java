@@ -60,11 +60,22 @@ public interface ApiClient {
     @GET("reading/{id}")
     Call<Readings> getReading(@Path("id") String id);
 
+    @FormUrlEncoded
+    @POST("reading/")
+    Call<Readings> newReading(@Field("glucoseLevel") Integer glucoseLevel, @Field("timePeriod") String timePeriod,
+                              @Field("action") String action, @Field("medication") String medication,
+                              @Field("notes") String notes, @Field("user") Integer user);
+
     @GET("reminders")
     Call<List<Reminder>> getReminders();
 
     @GET("reminder/{id}")
     Call<Reminder> getReminder(@Path("id") String id);
+
+    @FormUrlEncoded
+    @POST("reminder/")
+    Call<Reminder> newReminder(@Field("reminder") String reminder, @Field("alarm") Boolean alarm,
+                               @Field("user") Integer user);
 
     @GET("caregivers")
     Call<List<Caregiver>> getCaregivers();
@@ -72,11 +83,20 @@ public interface ApiClient {
     @GET("caregiver/{id}")
     Call<Caregiver> getCaregiver(@Path("id") String id);
 
+    @FormUrlEncoded
+    @POST("caregiver/")
+    Call<Caregiver> newCaregiver(@Field("relation") String relation, @Field("phone") String phone,
+                                 @Field("user") Integer user);
+
     @GET("doctors")
     Call<List<Doctor>> getDoctors();
 
     @GET("doctor/{id}")
     Call<Doctor> getDoctor(@Path("id") String id);
+
+    @FormUrlEncoded
+    @POST("caregiver/")
+    Call<Caregiver> newDoctor(@Field("phone") String phone, @Field("user") Integer user);
 
 //    @GET("medication")
 //    Call<List<Medication>> getMedications();
@@ -84,24 +104,7 @@ public interface ApiClient {
 //    @GET("medication/{id}")
 //    Call<Medication> getMedication(@Path("id") String id);
 
-    @FormUrlEncoded
-    @POST("reading/")
-    Call<Readings> newReading(@Field("glucoseLevel") Integer glucoseLevel, @Field("timePeriod") String timePeriod,
-                              @Field("action") String action, @Field("medication") String medication,
-                              @Field("notes") String notes, @Field("user") Integer user);
-
-    @FormUrlEncoded
-    @POST("reminder/")
-    Call<Reminder> newReminder(@Field("reminder") String reminder, @Field("alarm") Boolean alarm,
-                               @Field("user") Integer user);
-
-    @FormUrlEncoded
-    @POST("caregiver/")
-    Call<Caregiver> newCaregiver(@Field("relation") String relation, @Field("phone") String phone,
-                               @Field("user") Integer user);
-
     class Factory{
-
         private static ApiClient service;
         public static ApiClient getInstance(Context context){
 
@@ -122,5 +125,4 @@ public interface ApiClient {
             }
         }
     }
-
 }

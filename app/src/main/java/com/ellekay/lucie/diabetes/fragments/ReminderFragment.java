@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
+import com.ellekay.lucie.diabetes.models.Doctor;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.models.Reminder;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
@@ -31,8 +32,6 @@ import retrofit2.Response;
 
 public class ReminderFragment extends Fragment {
     private Context mContext;
-    private List<Readings> readingList = new ArrayList<>();
-    private ReadingAdapter mAdapter;
     private List<Reminder> reminderList = new ArrayList<>();
 
     private RealmConfiguration mRealmConfig;
@@ -72,6 +71,24 @@ public class ReminderFragment extends Fragment {
 
 
     private void getReminderList(){
+        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
+        apiClient.getReminders().enqueue(new Callback<List<Reminder>>() {
+            @Override
+            public void onResponse(Call<List<Reminder>> call, Response<List<Reminder>> response) {
+                if (response.isSuccessful()){
+                    response.body();
+                    reminderList = response.body();
+                    Log.d(TAG,""+ reminderList);
+                }else {
+                    Log.d(TAG, "Error "+response.errorBody());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Reminder>> call, Throwable t) {
+
+                Log.d(TAG, ""+t.getMessage());
+            }
+        });
     }
 }

@@ -52,6 +52,8 @@ public class DoctorActivity extends AppCompatActivity {
             public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
                 if (response.isSuccessful()){
                     response.body();
+                    doctorsList = response.body();
+                    Log.d(TAG,""+ doctorsList);
                 }else {
                     Log.d(TAG, "Error "+response.errorBody());
                 }
