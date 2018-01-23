@@ -1,5 +1,7 @@
 package com.ellekay.lucie.diabetes.models;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,6 +13,10 @@ public class Doctor {
     @SerializedName("id")
     @Expose
     private int id;
+
+    @SerializedName("user")
+    @Expose
+    private User user;
 
     @SerializedName("name")
     @Expose
@@ -30,17 +36,27 @@ public class Doctor {
 
     @Override
     public String toString() {
+        email = user.getEmail();
+        name = user.getName();
         return "Doctor{" +
-                "id=" + id +
-                ", doctor='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", notes='" + notes + '\'' +
+                "id = " + user.getId() +
+                ", name = '" + name +'\''+
+                ", email = '" + email +'\''+
+                ", phone = '" + phone + '\'' +
+                ", notes = '" + notes + '\'' +
                 '}';
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setId(User user) {
+        this.user = user;
+    }
+
     public int getId() {
-        return id;
+        return user.getId();
     }
 
     public void setId(int id) {
@@ -48,7 +64,7 @@ public class Doctor {
     }
 
     public String getName() {
-        return name;
+        return user.getName();
     }
 
     public void setName(String name) {
@@ -56,7 +72,7 @@ public class Doctor {
     }
 
     public String getEmail() {
-        return email;
+        return user.getEmail();
     }
 
     public void setEmail(String email) {
@@ -78,4 +94,6 @@ public class Doctor {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+
 }

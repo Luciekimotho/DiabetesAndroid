@@ -29,12 +29,15 @@ public class DoctorDetail extends AppCompatActivity {
         tvPhone= (TextView) findViewById(R.id.tv_doctor_phone);
         tvEmail = (TextView) findViewById(R.id.tv_doctor_email);
 
-        mRealmConfig = new RealmConfiguration.Builder(this).build();
+        mRealmConfig = new RealmConfiguration
+                .Builder(this)
+                .deleteRealmIfMigrationNeeded()
+                .build();
         Realm.setDefaultConfiguration(mRealmConfig);
         mRealm = Realm.getDefaultInstance();
 
         extras = getIntent().getExtras();
-        String id = extras.getSerializable(ARG_NAME_ID).toString();
+        int id = (int) extras.getSerializable(ARG_NAME_ID);
 
 
         RealmQuery<DoctorRealm> doctor = mRealm.where(DoctorRealm.class).equalTo("id", id);

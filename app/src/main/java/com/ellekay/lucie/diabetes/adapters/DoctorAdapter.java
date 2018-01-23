@@ -32,6 +32,7 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
 
     public DoctorAdapter(RealmResults<DoctorRealm> mRealmObjects) {
         this.mRealmObjects = mRealmObjects;
+
     }
 
     @Override
@@ -43,9 +44,9 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.mRealmObject = mRealmObjects.get(position);
-        holder.name.setText(mRealmObjects.get(position).getName());
-        holder.phone.setText(mRealmObjects.get(position).getPhone());
-        holder.email.setText(mRealmObjects.get(position).getEmail());
+        holder.name.setText("Doctor's name: "+mRealmObjects.get(position).getName());
+        holder.phone.setText("Phone: "+ mRealmObjects.get(position).getPhone());
+        holder.email.setText("Email: "+mRealmObjects.get(position).getEmail());
         //holder.date.setText(mRealmObjects.get(position).getNotes());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +54,7 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DoctorDetail.class);
-                intent.putExtra(DoctorDetail.ARG_NAME_ID, String.valueOf(holder.mRealmObject.getId()));
+                intent.putExtra(DoctorDetail.ARG_NAME_ID, (holder.mRealmObject.getId()));
                 context.startActivity(intent);
             }
         });
@@ -62,7 +63,6 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
 
     @Override
     public int getItemCount() {
-        Log.d("SIZE", "Realm size is: "+mRealmObjects.size());
         return mRealmObjects.size();
     }
 
@@ -75,7 +75,7 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
             super(v);
             mView = v;
             name = (TextView) v.findViewById(R.id.tv_doc_name);
-            phone = (TextView) v.findViewById(R.id.tv_doctor_phone);
+            phone = (TextView) v.findViewById(R.id.tv_doc_phone);
             email = (TextView) v.findViewById(R.id.tv_doc_email);
         }
     }

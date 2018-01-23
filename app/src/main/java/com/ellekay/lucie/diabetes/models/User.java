@@ -8,14 +8,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class User {
-
     @SerializedName("id")
     @Expose
     private int id;
 
-    @SerializedName("name")
+    @SerializedName("username")
     @Expose
-    private String name;
+    private String username;
 
     @SerializedName("email")
     @Expose
@@ -27,10 +26,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "Profile{" +
+        return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", name='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
@@ -44,11 +43,11 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
 
     public String getEmail() {

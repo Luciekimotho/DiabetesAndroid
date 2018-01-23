@@ -62,4 +62,5 @@
     <string name="doctor_name">Doctor\'s name</string>
     <string name="doctor_email" />
     <string name="doctor_phone">Doctor\'s phone</string>
+    <string name="doctor_email2">Doctor\'s email</string>
 </resources>

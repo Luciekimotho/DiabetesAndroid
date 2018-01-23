@@ -1,10 +1,8 @@
 package com.ellekay.lucie.diabetes.fragments;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,22 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.ellekay.lucie.diabetes.Application;
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.GlucoseAdapter;
-import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
-
-import com.ellekay.lucie.diabetes.models.Doctor;
-import com.ellekay.lucie.diabetes.models.Glucose;
-import com.ellekay.lucie.diabetes.models.Readings;
-import com.ellekay.lucie.diabetes.models.Reminder;
-
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
-import com.ellekay.lucie.diabetes.views.History;
 import com.ellekay.lucie.diabetes.views.TakeReadings;
 
 import java.util.ArrayList;
@@ -45,8 +33,6 @@ import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by lucie on 10/1/2017.
@@ -61,9 +47,7 @@ public class HistoryFragement extends Fragment {
     private List<Readings> readingList = new ArrayList<>();
 
     private RecyclerView recyclerView;
-    private ReadingAdapter mAdapter;
     FloatingActionButton fab;
-    //ReadingTask readingTask;
 
     public static HistoryFragement newInstance(){
         HistoryFragement fragement = new HistoryFragement();
