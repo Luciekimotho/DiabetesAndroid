@@ -2,7 +2,6 @@ package com.ellekay.lucie.diabetes.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,23 +11,17 @@ import android.widget.TextView;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.models.DoctorRealm;
-import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.views.DoctorDetail;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import io.realm.RealmResults;
 
 /**
  * Created by lucie on 1/21/2018.
  */
-
 public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHolder>{
     private RealmResults<DoctorRealm> mRealmObjects;
     private Context context;
+    String TAG = "Adapter";
 
     public DoctorAdapter(RealmResults<DoctorRealm> mRealmObjects) {
         this.mRealmObjects = mRealmObjects;
@@ -44,14 +37,17 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.mRealmObject = mRealmObjects.get(position);
-        holder.name.setText("Doctor's name: "+mRealmObjects.get(position).getName());
-        holder.phone.setText("Phone: "+ mRealmObjects.get(position).getPhone());
-        holder.email.setText("Email: "+mRealmObjects.get(position).getEmail());
+        holder.name.setText(mRealmObjects.get(position).getName());
+        holder.phone.setText( mRealmObjects.get(position).getPhone());
+        holder.email.setText(mRealmObjects.get(position).getEmail());
+
         //holder.date.setText(mRealmObjects.get(position).getNotes());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "id sent is:"+ holder.mRealmObject.getId());
+
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DoctorDetail.class);
                 intent.putExtra(DoctorDetail.ARG_NAME_ID, (holder.mRealmObject.getId()));
@@ -63,6 +59,7 @@ public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHol
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "Doctor adapter size: "+mRealmObjects.size());
         return mRealmObjects.size();
     }
 

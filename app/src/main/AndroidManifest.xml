@@ -3,6 +3,12 @@
     package="com.ellekay.lucie.diabetes">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required to export and save CSV or graph -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Required to set reminders -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -14,23 +20,25 @@
         <activity
             android:name=".views.IntroActivity"
             android:theme="@style/Theme.Intro">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
         <activity
             android:name=".auth.SignUp"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".auth.Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.TakeReadings"
-            android:label="@string/title_activity_take_readings"
+            android:name=".views.NewReading"
+            android:label="@string/add_reading"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -65,7 +73,11 @@
             android:name=".views.CaregiverActivity"
             android:label="@string/title_activity_caregiver"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".views.DoctorDetail"></activity>
+        <activity android:name=".views.DoctorDetail" />
+        <activity android:name=".views.NewReminder">
+
+        </activity>
+        <activity android:name=".views.NewDoctor"></activity>
     </application>
 
 </manifest>

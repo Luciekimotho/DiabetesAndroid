@@ -21,7 +21,7 @@ import com.ellekay.lucie.diabetes.adapters.GlucoseAdapter;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
-import com.ellekay.lucie.diabetes.views.TakeReadings;
+import com.ellekay.lucie.diabetes.views.NewReading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class HistoryFragement extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, TakeReadings.class));
+                startActivity(new Intent(mContext, NewReading.class));
             }
         });
 
@@ -89,12 +89,11 @@ public class HistoryFragement extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         final RealmResults<Glucose> glucoseRealmResults = getRealmResults();
-
+        //initiateApi(recyclerView);
         if (glucoseRealmResults.size() == 0){
             initiateApi(recyclerView);
         }else {
             setupRecyclerView(recyclerView, glucoseRealmResults);
-            Log.d(TAG, "Realm");
         }
 
         return rootView;

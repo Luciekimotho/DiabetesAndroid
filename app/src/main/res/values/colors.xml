@@ -2,10 +2,16 @@
 <resources>
     <color name="colorPrimaryDark">#138D75</color>
     <color name="colorPrimary">#3476b8</color>
-    <color name="colorAccent">#c7c7c7</color>
+    <color name="colorAccent">#FF254E6F</color>
 
     <color name="background">#910e40</color>
     <color name="background2">#BD4682</color>
     <color name="background3">#ffe775</color>
     <color name="background4">#6eb7c1</color>
+
+    <color name="hypo">#331468</color>
+    <color name="low">#418cda</color>
+    <color name="ok">#3c7f0a</color>
+    <color name="high">#faab57</color>
+    <color name="hyper">#d92f29</color>
 </resources>

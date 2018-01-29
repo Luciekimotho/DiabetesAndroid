@@ -58,24 +58,29 @@ public interface ApiClient {
     Call<List<Readings>> getReadings();
 
     @GET("reading/{id}")
-    Call<Readings> getReading(@Path("id") String id);
+    Call<Readings> getReading(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("reading/")
     Call<Readings> newReading(@Field("glucoseLevel") Integer glucoseLevel, @Field("timePeriod") String timePeriod,
-                              @Field("action") String action, @Field("medication") String medication,
                               @Field("notes") String notes, @Field("user") Integer user);
+
+    @GET("doctors")
+    Call<List<Doctor>> getDoctors();
+
+    @GET("doctor/{id}")
+    Call<Doctor> getDoctor(@Path("id") int id);
 
     @GET("reminders")
     Call<List<Reminder>> getReminders();
 
     @GET("reminder/{id}")
-    Call<Reminder> getReminder(@Path("id") String id);
+    Call<Reminder> getReminder(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("reminder/")
-    Call<Reminder> newReminder(@Field("reminder") String reminder, @Field("alarm") Boolean alarm,
-                               @Field("user") Integer user);
+    Call<Reminder> newReminder(@Field("reminder") String reminder,@Field("time") String time,
+                               @Field("alarm") Boolean alarm, @Field("user") Integer user);
 
     @GET("caregivers")
     Call<List<Caregiver>> getCaregivers();
@@ -88,11 +93,7 @@ public interface ApiClient {
     Call<Caregiver> newCaregiver(@Field("relation") String relation, @Field("phone") String phone,
                                  @Field("user") Integer user);
 
-    @GET("doctors")
-    Call<List<Doctor>> getDoctors();
 
-    @GET("doctor/{id}")
-    Call<Doctor> getDoctor(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("caregiver/")

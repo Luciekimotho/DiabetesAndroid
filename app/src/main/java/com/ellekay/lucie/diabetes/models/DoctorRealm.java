@@ -1,13 +1,14 @@
 package com.ellekay.lucie.diabetes.models;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 
 /**
  * Created by lucie on 1/21/2018.
  */
 
 public class DoctorRealm extends RealmObject {
-
+    @Index
     public int id;
     public String name;
     public String email;

@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TakeReadings extends AppCompatActivity {
+public class NewReading extends AppCompatActivity {
 
     EditText et_glucoreading, et_time, et_timeperiod, et_action, et_medication, et_notes;
     Spinner sp_time;
@@ -40,9 +40,9 @@ public class TakeReadings extends AppCompatActivity {
     public Integer userId;
     Button btnMeasure;
     MeasureTask myprogresstask;
-    private TakeReadings mContext;
+    private NewReading mContext;
     TextView profList;
-    String TAG = "Diabetes";
+    String TAG = "Reading";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class TakeReadings extends AppCompatActivity {
         et_glucoreading = (EditText)findViewById(R.id.et_glucosereading);
         et_time = (EditText) findViewById(R.id.et_time);
         //et_timeperiod = (EditText) findViewById(R.id.et_timeperiod);
-        et_action = (EditText)findViewById(R.id.et_action);
-        et_medication = (EditText)findViewById(R.id.et_medication);
+//        et_action = (EditText)findViewById(R.id.et_action);
+//        et_medication = (EditText)findViewById(R.id.et_medication);
         et_notes = (EditText) findViewById(R.id.et_notes);
 
         sp_time = (Spinner) findViewById(R.id.spinner);
@@ -73,7 +73,7 @@ public class TakeReadings extends AppCompatActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(TakeReadings.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(NewReading.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         et_time.setText( selectedHour + ":" + selectedMinute);
@@ -126,25 +126,25 @@ public class TakeReadings extends AppCompatActivity {
         date = et_time.getText().toString();
         //timePeriod = et_timeperiod.getText().toString();
         glucoReading = Integer.valueOf(et_glucoreading.getText().toString());
-        action = et_action.getText().toString();
-        medication = et_action.getText().toString();
+//        action = et_action.getText().toString();
+//        medication = et_action.getText().toString();
         notes = et_notes.getText().toString();
         userId = 1;
 
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.newReading(glucoReading,timePeriod,action, medication,notes,userId).enqueue(new Callback<Readings>() {
+        apiClient.newReading(glucoReading, timePeriod, notes, userId).enqueue(new Callback<Readings>() {
             @Override
             public void onResponse(Call<Readings> call, Response<Readings> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG,"Retrofit Response successful: record added");
                 }else {
                     //error
-                    Log.d(TAG,"Retrofit Response not successful: "+ response.code());
+                    Log.d(TAG,"Retrofit Response not successful: "+ response.toString());
                 }
             }
             @Override
             public void onFailure(Call<Readings> call, Throwable t) {
-
+                Log.d(TAG,"Reading: after reading function" + t);
             }
         });
     }
@@ -160,7 +160,7 @@ public class TakeReadings extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(TakeReadings.this,
+            progressDialog = ProgressDialog.show(NewReading.this,
                     "ProgressDialog",
                     "Wait!");
             progressDialog.setCanceledOnTouchOutside(true);
@@ -171,7 +171,7 @@ public class TakeReadings extends AppCompatActivity {
                 }
             });
 
-            Toast.makeText(TakeReadings.this,
+            Toast.makeText(NewReading.this,
                     "Progress Start",
                     Toast.LENGTH_LONG).show();
         }
@@ -179,12 +179,12 @@ public class TakeReadings extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(TakeReadings.this,
+            Toast.makeText(NewReading.this,
                     "Progress Ended",
                     Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
 
-            startActivity(new Intent(TakeReadings.this, Home.class));
+            startActivity(new Intent(NewReading.this, Home.class));
         }
     }
 

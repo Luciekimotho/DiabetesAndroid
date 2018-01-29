@@ -63,4 +63,26 @@
     <string name="doctor_email" />
     <string name="doctor_phone">Doctor\'s phone</string>
     <string name="doctor_email2">Doctor\'s email</string>
+    <string name="reminder">Reminder</string>
+    <string name="alarm">Alarm</string>
+    <string name="add_reading">Add reading</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="add_reminder">Add reminder</string>
+    <string name="alarm_on">Alarm on</string>
+    <string name="alarm_off">Alarm off</string>
+
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="set_alarm">Set alarm</string>
+    <string name="hyper">Hyperglycemia</string>
+    <string name="low">Low</string>
+    <string name="ok">Ok</string>
+    <string name="hypo">Hypoglycemia</string>
+    <string name="high">High</string>
+
+    <string name="export">Graph exported to gallery</string>
+    <string name="not_export">Graph not exported to gallery</string>
+    <string name="doctors">Doctors</string>
+    <string name="emergency">Emergency contacts</string>
+    <string name="log_out">Log out</string>
 </resources>

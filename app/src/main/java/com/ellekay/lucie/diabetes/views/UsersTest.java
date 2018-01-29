@@ -96,7 +96,7 @@ public class UsersTest extends AppCompatActivity  {
     }
 
     public void toReadings(View view){
-        startActivity(new Intent(UsersTest.this, TakeReadings.class));
+        startActivity(new Intent(UsersTest.this, NewReading.class));
     }
 
 

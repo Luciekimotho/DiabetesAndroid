@@ -15,7 +15,6 @@ import android.view.View;
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
 import com.ellekay.lucie.diabetes.models.Glucose;
-import com.ellekay.lucie.diabetes.models.Profile;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
 
@@ -68,7 +67,7 @@ public class History extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                startActivity(new Intent(History.this, TakeReadings.class));
+                startActivity(new Intent(History.this, NewReading.class));
             }
         });
     }

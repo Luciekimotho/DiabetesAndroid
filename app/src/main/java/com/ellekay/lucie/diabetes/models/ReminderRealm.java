@@ -1,41 +1,28 @@
 package com.ellekay.lucie.diabetes.models;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
 
 /**
- * Created by lucie on 1/10/2018.
+ * Created by lucie on 1/23/2018.
  */
 
-public class Reminder {
+public class ReminderRealm extends RealmObject {
 
-    @SerializedName("id")
-    @Expose
-    private int id;
-
-    @SerializedName("reminder")
-    @Expose
-    private String reminder;
-
-    @SerializedName("time")
-    @Expose
-    private String time;
-
-    @SerializedName("alarm")
-    @Expose
-    private Boolean alarm;
-
-    @SerializedName("user")
-    @Expose
-    private int user;
+    @Index
+    public int id;
+    public String reminder;
+    public String time;
+    public Boolean alarm;
+    public int user;
 
     @Override
     public String toString() {
         return "Reminder{" +
                 "id=" + id +
                 ", reminder='" + reminder + '\'' +
-                ", alarm='" + alarm + '\'' +
                 ", time='" + time + '\'' +
+                ", alarm='" + alarm + '\'' +
                 ", user=" + user +
                 '}';
     }

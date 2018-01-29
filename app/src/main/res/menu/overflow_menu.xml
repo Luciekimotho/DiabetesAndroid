@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_doctor"
+        android:icon="?android:attr/actionModePasteDrawable"
+        android:title="@string/doctors" />
+
+    <item
+        android:id="@+id/navigation_caregiver"
+        android:icon="@drawable/graph"
+        android:title="@string/emergency" />
+
+    <item
+        android:id="@+id/navigation_logout"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/log_out" />
+</menu>

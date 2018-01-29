@@ -59,10 +59,6 @@ public class Doctor {
         return user.getId();
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return user.getName();
     }
