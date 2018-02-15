@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ellekay.lucie.diabetes.R;
@@ -91,6 +92,12 @@ public class OverviewFragment extends Fragment {
     List<GlucoseGraphObject> glucoseGraphObjects;
     private List<String> xValues = new ArrayList<>();
     boolean isNewGraphEnabled;
+    Switch alarmSwitch;
+    long lastInsertedId;
+    Glucose lastEntry;
+
+    String lastGlucose;
+    Date lastTime, formattedDate;
 
 
     private RealmConfiguration mRealmConfig;
@@ -118,14 +125,6 @@ public class OverviewFragment extends Fragment {
         chart = (LineChart) v.findViewById(R.id.chart);
 
         TextView lastcheck = (TextView) v.findViewById(R.id.tv_lastcheck);
-
-        testBtn = (Button) v.findViewById(R.id.test_btn);
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(),DoctorActivity.class));
-            }
-        });
 
         mRealmConfig = new RealmConfiguration
                 .Builder(getActivity())
@@ -165,34 +164,27 @@ public class OverviewFragment extends Fragment {
         chart.setBackgroundColor(Color.parseColor("#FFFFFF"));
         chart.setGridBackgroundColor(Color.parseColor("#FFFFFF"));
 
-        //setData2();
+        setData2();
         setData();
 
-        Spinner sp_time = (Spinner) v.findViewById(R.id.timespinner);
-        List<String> timePeriods = new ArrayList<>();
-        timePeriods.add("Day");
-        timePeriods.add("Week");
-        timePeriods.add("Month");
+//        lastEntry = getLastEntry();
+//        lastTime = lastEntry.getTimeOfDay();
+//        lastGlucose = lastEntry.getGlucoseLevel().toString();
+//
+//        String format = "EEE MMM dd HH:mm:ss zzz yyyy"; //In which you need put here
+//        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+//        try {
+//            formattedDate = sdf.parse(lastTime.toString());
+//            String format2 = "dd/MM/yy";
+//            SimpleDateFormat sdf2 = new SimpleDateFormat(format2, Locale.US);
+//            sdf2.format(formattedDate);
+//            lastcheck.setText("Last check: "+sdf2.format(formattedDate) +"             " +lastGlucose+ " mg/dL");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            Log.e("Retrofit", ""+e);
+//        }
 
-        ArrayAdapter<String> timePeriodAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, timePeriods);
-        timePeriodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        sp_time.setAdapter(timePeriodAdapter);
-
-        sp_time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String timePeriod = parent.getItemAtPosition(position).toString();
-                //Toast.makeText(parent.getContext(), "Selected: " + timePeriod, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        lastcheck.setText("Last check: "+ "" + " mg/dL");
+        //lastcheck.setText("Last check: "+formattedDate +"" +lastGlucose+ " mg/dL");
         return v;
     }
 
@@ -235,42 +227,56 @@ public class OverviewFragment extends Fragment {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
                                            @Override
                                            public void execute(Realm realm) {
-                                               for(int i =0; i < glucoseReading.size(); i++){
-                                                   Glucose glucose = realm.createObject(Glucose.class);
-                                                   glucose.setId(glucoseReading.get(i).getId());
-                                                   glucose.setGlucoseLevel(glucoseReading.get(i).getGlucoseLevel());
-                                                   glucose.setTimeOfDay(glucoseReading.get(i).getTimeOfDay());
-                                                   glucose.setTimePeriod(glucoseReading.get(i).getTimePeriod());
-                                                   glucose.setAction(glucoseReading.get(i).getAction());
-                                                   glucose.setMedication(glucoseReading.get(i).getMedication());
-                                                   glucose.setNotes(glucoseReading.get(i).getNotes());
-                                                   glucose.setCreatedAt(glucoseReading.get(i).getCreatedAt());
-                                                   glucose.setUpdatedAt(glucoseReading.get(i).getUpdatedAt());
-                                                   glucose.setUser(glucoseReading.get(i).getUser());
+               for(int i =0; i < glucoseReading.size(); i++){
+                   Glucose glucose = realm.createObject(Glucose.class);
+                   glucose.setId(glucoseReading.get(i).getId());
+                   glucose.setGlucoseLevel(glucoseReading.get(i).getGlucoseLevel());
+                   glucose.setTimeOfDay(glucoseReading.get(i).getTimeOfDay());
+                   glucose.setTimePeriod(glucoseReading.get(i).getTimePeriod());
+                   glucose.setAction(glucoseReading.get(i).getAction());
+                   glucose.setMedication(glucoseReading.get(i).getMedication());
+                   glucose.setNotes(glucoseReading.get(i).getNotes());
+                   glucose.setCreatedAt(glucoseReading.get(i).getCreatedAt());
+                   glucose.setUpdatedAt(glucoseReading.get(i).getUpdatedAt());
+                   glucose.setUser(glucoseReading.get(i).getUser());
+               }
+           }
 
-                                               }
-                                           }
+       }, new Realm.Transaction.OnSuccess(){
 
-                                       }, new Realm.Transaction.OnSuccess(){
-
-                                           @Override
-                                           public void onSuccess() {
-                                               Log.d("Realm","savedRealmObjects");
-                                           }
-                                       },new Realm.Transaction.OnError(){
-                                           @Override
-                                           public void onError(Throwable error) {
-                                               Log.d("Realm","Error: " +error.getMessage());
-                                           }
-                                       }
+           @Override
+           public void onSuccess() {
+               Log.d("Realm","savedRealmObjects");
+           }
+       },new Realm.Transaction.OnError(){
+           @Override
+           public void onError(Throwable error) {
+               Log.d("Realm","Error: " +error.getMessage());
+           }
+       }
         );
         Log.d(TAG,"Realm size is:" + glucoseReading.size());
     }
 
     private RealmResults<Glucose> getRealmResults() {
         RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class).findAllSorted("id", Sort.ASCENDING).distinct("id");
-        Log.d("Realm","Realm size : " + sortedGlucose.size());
+        Log.d(TAG,"Realm size : " + sortedGlucose.size());
+//        lastInsertedId = sortedGlucose.last().getId();
+//        lastEntry = mRealm.where(Glucose.class)
+//               .equalTo("id", lastInsertedId)
+//               .findFirst();
+//        Log.d(TAG, "LAST entry: "+ lastEntry);
         return sortedGlucose;
+    }
+
+    private  Glucose getLastEntry(){
+        RealmResults<Glucose> sortedGlucose = mRealm.where(Glucose.class).findAllSorted("id", Sort.ASCENDING).distinct("id");
+        //lastInsertedId = sortedGlucose.last().getId();
+        Glucose glastEntry = mRealm.where(Glucose.class)
+                .equalTo("id", lastInsertedId)
+                .findFirst();
+        Log.d(TAG, "LAST entry: "+ glastEntry);
+        return glastEntry;
     }
 
     private List<Readings> initiateRealmApi(){
@@ -301,13 +307,13 @@ public class OverviewFragment extends Fragment {
         String label;
 
         for (int i = 0; i<glucoseRealmResults.size(); i++){
-            String date = glucoseRealmResults.get(i).getTimeOfDay();
+            Date date = glucoseRealmResults.get(i).getTimeOfDay();
 
             String format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
 
             try {
-                newDate = sdf.parse(date);
+                newDate = sdf.parse(date.toString());
             } catch (ParseException e) {
                 e.printStackTrace();
                 Log.e("Retrofit", ""+e);

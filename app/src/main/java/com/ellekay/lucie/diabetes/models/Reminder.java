@@ -3,6 +3,8 @@ package com.ellekay.lucie.diabetes.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Created by lucie on 1/10/2018.
  */
@@ -19,7 +21,7 @@ public class Reminder {
 
     @SerializedName("time")
     @Expose
-    private String time;
+    private Date time;
 
     @SerializedName("alarm")
     @Expose
@@ -72,11 +74,11 @@ public class Reminder {
         this.user = user;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

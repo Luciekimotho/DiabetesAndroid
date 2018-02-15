@@ -89,7 +89,7 @@ public class HistoryFragement extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         final RealmResults<Glucose> glucoseRealmResults = getRealmResults();
-        //initiateApi(recyclerView);
+        initiateApi(recyclerView);
         if (glucoseRealmResults.size() == 0){
             initiateApi(recyclerView);
         }else {

@@ -6,4 +6,5 @@ package com.ellekay.lucie.diabetes;
 
 public class Application extends android.app.Application {
     String TAG = "Diabetes";
+
 }

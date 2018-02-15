@@ -7,6 +7,10 @@ package com.ellekay.lucie.diabetes.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
+
 public class Readings {
 
     @SerializedName("id")
@@ -20,7 +24,7 @@ public class Readings {
     private String timePeriod;
     @SerializedName("timeOfDay")
     @Expose
-    private String timeOfDay;
+    private Date timeOfDay;
     @SerializedName("action")
     @Expose
     private String action;
@@ -64,11 +68,11 @@ public class Readings {
         this.timePeriod = timePeriod;
     }
 
-    public String getTimeOfDay() {
+    public Date getTimeOfDay() {
         return timeOfDay;
     }
 
-    public void setTimeOfDay(String timeOfDay) {
+    public void setTimeOfDay(Date timeOfDay) {
         this.timeOfDay = timeOfDay;
     }
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.GlucoseAdapter;
 import com.ellekay.lucie.diabetes.adapters.ReadingAdapter;
 import com.ellekay.lucie.diabetes.adapters.ReminderAdapter;
+import com.ellekay.lucie.diabetes.db.DatabaseHandler;
+import com.ellekay.lucie.diabetes.db.DatabaseResults;
 import com.ellekay.lucie.diabetes.models.Doctor;
 import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
@@ -29,6 +33,7 @@ import com.ellekay.lucie.diabetes.rest.ApiClient;
 import com.ellekay.lucie.diabetes.views.NewReminder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -51,7 +56,16 @@ public class ReminderFragment extends Fragment {
     private Realm mRealm;
     String TAG = "Reminders";
 
+    String  realmReminder;
+    Date realmTime;
+    int realmUid;
+    Boolean realmAlarm;
+
+    DatabaseResults db;
+
     private RecyclerView recyclerView;
+
+    TextView noReminder;
 
     public static ReminderFragment newInstance(){
         ReminderFragment fragement = new ReminderFragment();
@@ -77,6 +91,8 @@ public class ReminderFragment extends Fragment {
             }
         });
 
+        noReminder = (TextView) v.findViewById(R.id.empty_view);
+
         mRealmConfig = new RealmConfiguration
                 .Builder(getActivity())
                 .deleteRealmIfMigrationNeeded()
@@ -85,6 +101,8 @@ public class ReminderFragment extends Fragment {
         Realm.setDefaultConfiguration(mRealmConfig);
         mRealm = Realm.getDefaultInstance();
 
+        db = new DatabaseResults(getContext());
+
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -92,14 +110,25 @@ public class ReminderFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        //db.getReminders();
+        db.getReminderList();
+
         final RealmResults<ReminderRealm> reminderRealmResults = getRealmResults();
         initiateApi(recyclerView);
         if (reminderRealmResults.size() == 0){
             initiateApi(recyclerView);
+            noReminder.setVisibility(View.VISIBLE);
         }else {
             setupRecyclerView(recyclerView, reminderRealmResults);
+            noReminder.setVisibility(View.GONE);
         }
 
+
+        Snackbar reminderSnackbar;
+
+        ReminderRealm reminderRealm = new ReminderRealm();
+
+        //db.addReminder(reminderRealm);
         return v;
     }
 
@@ -112,7 +141,6 @@ public class ReminderFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 
     private void initiateApi(final View recyclerView){
         ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
@@ -128,64 +156,45 @@ public class ReminderFragment extends Fragment {
                     Log.d(TAG, "Error "+response.errorBody());
                 }
             }
-
             @Override
             public void onFailure(Call<List<Reminder>> call, Throwable t) {
 
                 Log.d(TAG, ""+t.getMessage());
             }
         });
-    }
+//        reminderList = db.getReminderList();
+//        executeRealmWrite(reminderList);
+//        Log.d(TAG, "Reminder frag: "+reminderList);
 
-    private void getReminderList(){
-        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-        apiClient.getReminders().enqueue(new Callback<List<Reminder>>() {
-            @Override
-            public void onResponse(Call<List<Reminder>> call, Response<List<Reminder>> response) {
-                if (response.isSuccessful()){
-                    response.body();
-                    reminderList = response.body();
-                    Log.d(TAG,""+ reminderList);
-                }else {
-                    Log.d(TAG, "Error "+response.errorBody());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Reminder>> call, Throwable t) {
-
-                Log.d(TAG, ""+t.getMessage());
-            }
-        });
     }
 
     private void executeRealmWrite(final List<Reminder> reminders){
         mRealm.executeTransactionAsync(new Realm.Transaction() {
                                            @Override
                                            public void execute(Realm realm) {
-                                               for(int i =0; i < reminders.size(); i++){
-                                                   ReminderRealm reminder = realm.createObject(ReminderRealm.class);
-                                                   reminder.setId(reminders.get(i).getId());
-                                                   reminder.setReminder(reminders.get(i).getReminder());
-                                                   reminder.setAlarm(reminders.get(i).getAlarm());
-                                                   reminder.setTime(reminders.get(i).getTime());
+               for(int i =0; i < reminders.size(); i++){
+                   ReminderRealm reminder = realm.createObject(ReminderRealm.class);
+                   reminder.setId(reminders.get(i).getId());
+                   reminder.setReminder(reminders.get(i).getReminder());
+                   reminder.setAlarm(reminders.get(i).getAlarm());
+                   reminder.setTime(reminders.get(i).getTime());
 //                                                   glucose.setTimePeriod(glucoseReading.get(i).getTimePeriod());
-                                                   reminder.setUser(reminders.get(i).getUser());
-                                               }
-                                           }
+                   reminder.setUser(reminders.get(i).getUser());
+               }
+           }
 
-                                       }, new Realm.Transaction.OnSuccess(){
+       }, new Realm.Transaction.OnSuccess(){
 
-                                           @Override
-                                           public void onSuccess() {
-                                               Log.d("Realm","savedRealmObjects");
-                                           }
-                                       },new Realm.Transaction.OnError(){
-                                           @Override
-                                           public void onError(Throwable error) {
-                                               Log.d("Realm","Error: " +error.getMessage());
-                                           }
-                                       }
+           @Override
+           public void onSuccess() {
+               Log.d("Realm","savedRealmObjects");
+           }
+       },new Realm.Transaction.OnError(){
+           @Override
+           public void onError(Throwable error) {
+               Log.d("Realm","Error: " +error.getMessage());
+           }
+       }
         );
         Log.d(TAG,"Realm size is:" + reminders.size());
     }
@@ -211,6 +220,8 @@ public class ReminderFragment extends Fragment {
             }
         });
     }
+
+    private void updateRealmObjects(){}
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, RealmResults<ReminderRealm> results){
         recyclerView.setAdapter(new ReminderAdapter(results));

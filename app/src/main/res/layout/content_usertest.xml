@@ -34,7 +34,6 @@
             android:id="@+id/one_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="oneUser"
             android:text="@string/one_user" />
 
         <Button

@@ -18,7 +18,7 @@ import io.realm.RealmResults;
 /**
  * Created by lucie on 1/21/2018.
  */
-public class DoctorAdapter  extends RecyclerView.Adapter<DoctorAdapter.MyViewHolder>{
+public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.MyViewHolder>{
     private RealmResults<DoctorRealm> mRealmObjects;
     private Context context;
     String TAG = "Adapter";

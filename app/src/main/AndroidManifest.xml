@@ -19,19 +19,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".views.IntroActivity"
-            android:theme="@style/Theme.Intro">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Intro"></activity>
         <activity
             android:name=".auth.SignUp"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".auth.Login"
             android:label="@string/title_activity_login"
@@ -44,11 +36,18 @@
         <activity
             android:name=".views.UsersTest"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".views.UserProfile"
             android:label="@string/title_activity_user_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".views.Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.Home" />
+        </activity>
         <activity
             android:name=".views.History"
             android:label="@string/title_activity_history"
@@ -64,20 +63,38 @@
         <activity
             android:name=".views.Home"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".views.DoctorActivity"
             android:label="@string/title_activity_doctor"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".views.Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.Home" />
+
+        </activity>
         <activity
             android:name=".views.CaregiverActivity"
             android:label="@string/title_activity_caregiver"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".views.Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.Home" />
+        </activity>
         <activity android:name=".views.DoctorDetail" />
-        <activity android:name=".views.NewReminder">
+        <activity android:name=".views.NewReminder"></activity>
+        <activity android:name=".views.NewDoctor" />
+        <activity android:name=".views.ChatActivity">
 
         </activity>
-        <activity android:name=".views.NewDoctor"></activity>
     </application>
 
 </manifest>

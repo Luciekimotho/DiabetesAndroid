@@ -1,61 +1,43 @@
 package com.ellekay.lucie.diabetes.models;
 
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+
 /**
- * Created by lucie on 9/27/2017.
+ * Created by lucie on 2/4/2018.
  */
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+public class PatientRealm extends RealmObject {
 
-public class Profile {
-
-    @SerializedName("id")
-    @Expose
+    private int uid;
     private int id;
-
-    @SerializedName("email")
-    @Expose
+    private String name;
     private String email;
-
-    @SerializedName("dateOfBirth")
-    @Expose
     private String dateOfBirth;
-
-
-    @SerializedName("height")
-    @Expose
     private int height;
-
-    @SerializedName("weight")
-    @Expose
     private int weight;
-
-    @SerializedName("location")
-    @Expose
     private String location;
-
-    @SerializedName("sex")
-    @Expose
     private String sex;
-
-    @SerializedName("user")
-    @Expose
-    private int user;
 
     @Override
     public String toString() {
-        return "Profile{" +
+        return "Patient{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", height=" + height +
                 ", weight=" + weight +
                 ", location='" + location + '\'' +
                 ", sex='" + sex + '\'' +
-                ", user=" + user +
                 '}';
     }
 
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
     public int getId() {
         return id;
@@ -63,6 +45,14 @@ public class Profile {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -112,15 +102,4 @@ public class Profile {
     public void setSex(String sex) {
         this.sex = sex;
     }
-
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
-    }
-
 }
-
-

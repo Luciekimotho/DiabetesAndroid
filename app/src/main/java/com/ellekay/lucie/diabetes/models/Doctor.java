@@ -39,7 +39,7 @@ public class Doctor {
         email = user.getEmail();
         name = user.getName();
         return "Doctor{" +
-                "id = " + user.getId() +
+                "id = " + id +
                 ", name = '" + name +'\''+
                 ", email = '" + email +'\''+
                 ", phone = '" + phone + '\'' +
@@ -51,12 +51,12 @@ public class Doctor {
         return user;
     }
 
-    public void setId(User user) {
-        this.user = user;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getId() {
-        return user.getId();
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {

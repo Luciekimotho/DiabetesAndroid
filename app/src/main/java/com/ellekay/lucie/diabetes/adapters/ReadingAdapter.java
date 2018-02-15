@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.models.Readings;
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,13 +58,13 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
         holder.glucoseLevel.setText(readings.getGlucoseLevel().toString() + " mg/dL");
         holder.timePeriod.setText(readings.getTimePeriod());
 
-        String date= readings.getTimeOfDay();
-        String format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
+        Date date= readings.getTimeOfDay();
+        String format = "EEE MMM dd HH:mm:ss zzz yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-        Log.d("Retrofit","sdf"+sdf);
+        Log.d("Retrofit date",sdf.toString());
 
         try {
-            Date newDate = sdf.parse(date);
+            Date newDate = sdf.parse(date.toString());
             String format2 = "dd/MM/yyyy HH:mm";
             SimpleDateFormat sdf2 = new SimpleDateFormat(format2, Locale.US);
             holder.date.setText(sdf2.format(newDate));

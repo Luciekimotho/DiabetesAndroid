@@ -1,5 +1,7 @@
 package com.ellekay.lucie.diabetes.models;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 
@@ -12,9 +14,12 @@ public class ReminderRealm extends RealmObject {
     @Index
     public int id;
     public String reminder;
-    public String time;
+    public Date time;
     public Boolean alarm;
     public int user;
+
+//    public ReminderRealm(int id, String alarmTime, String label, boolean alarm, int user) {
+//    }
 
     @Override
     public String toString() {
@@ -59,11 +64,11 @@ public class ReminderRealm extends RealmObject {
         this.user = user;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

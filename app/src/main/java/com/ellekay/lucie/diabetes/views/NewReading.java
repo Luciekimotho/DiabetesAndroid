@@ -124,10 +124,7 @@ public class NewReading extends AppCompatActivity {
 
     public void takeMeasurement() {
         date = et_time.getText().toString();
-        //timePeriod = et_timeperiod.getText().toString();
         glucoReading = Integer.valueOf(et_glucoreading.getText().toString());
-//        action = et_action.getText().toString();
-//        medication = et_action.getText().toString();
         notes = et_notes.getText().toString();
         userId = 1;
 
@@ -170,7 +167,6 @@ public class NewReading extends AppCompatActivity {
 
                 }
             });
-
             Toast.makeText(NewReading.this,
                     "Progress Start",
                     Toast.LENGTH_LONG).show();
@@ -184,8 +180,12 @@ public class NewReading extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
 
-            startActivity(new Intent(NewReading.this, Home.class));
+            Intent intent = new Intent(NewReading.this, Home.class);
+            intent.putExtra("fragmentNumber", 2);
+            startActivity(intent);
         }
     }
+
+
 
 }

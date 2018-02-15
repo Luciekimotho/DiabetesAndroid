@@ -1,15 +1,24 @@
 package com.ellekay.lucie.diabetes.auth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.views.UserProfile;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity {
     EditText etname, etemail, etpassword;
@@ -17,6 +26,9 @@ public class SignUp extends AppCompatActivity {
     String name, email, password;
     Context mContext;
     String TAG = "signup";
+    SessionManagement session;
+    ProgressDialog progressDialog;
+    Integer id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +36,8 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+
+        session = new SessionManagement(getApplicationContext());
 
         etname = (EditText) findViewById(R.id.et_name);
         etemail = (EditText) findViewById(R.id.et_email);
@@ -40,22 +54,24 @@ public class SignUp extends AppCompatActivity {
     }
 
     public void signUp(View view){
-//        ApiClient apiClient = ApiClient.Factory.getInstance(mContext);
-//        apiClient.createUser(name, email, password).enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                Log.d(TAG,"create user successful");
-//                startActivity(new Intent(getApplicationContext(),Login.class));
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<User> call, Throwable t) {
-//                Log.d(TAG,"create user not successful");
-//            }
-//        });
-        startActivity(new Intent(getApplicationContext(),UserProfile.class));
+        name = etname.getText().toString();
+        email = etemail.getText().toString();
+        password = etpassword.getText().toString().trim();
 
+        session.createPatientSession(name,email,password);
+
+        Intent intent = new Intent(SignUp.this, UserProfile.class);
+        intent.putExtra(UserProfile.KEY_UNAME, name );
+        intent.putExtra(UserProfile.KEY_EMAIL, email);
+        intent.putExtra(UserProfile.KEY_PASS, password);
+        startActivity(intent);
+
+        //startActivity(new Intent(SignUp.this,UserProfile.class));
+
+        progressDialog = ProgressDialog.show(SignUp.this,
+                "ProgressDialog",
+                "Wait!");
+        progressDialog.setCanceledOnTouchOutside(true);
 
     }
 

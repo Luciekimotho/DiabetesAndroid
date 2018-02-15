@@ -43,13 +43,6 @@ public class Overview extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        testBtn = (Button) findViewById(R.id.test_btn);
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Overview.this,DoctorActivity.class));
-            }
-        });
 
         getReadingList();
     }

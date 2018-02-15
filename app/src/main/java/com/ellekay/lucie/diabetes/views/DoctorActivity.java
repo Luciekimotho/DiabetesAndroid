@@ -7,11 +7,9 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +20,7 @@ import com.ellekay.lucie.diabetes.R;
 import com.ellekay.lucie.diabetes.adapters.DoctorAdapter;
 import com.ellekay.lucie.diabetes.models.Doctor;
 import com.ellekay.lucie.diabetes.models.DoctorRealm;
+import com.ellekay.lucie.diabetes.auth.SessionManagement;
 import com.ellekay.lucie.diabetes.rest.ApiClient;
 
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ public class DoctorActivity extends AppCompatActivity {
     private RealmConfiguration mRealmConfig;
     private Realm mRealm;
     String TAG = "Doctor";
+    SessionManagement session;
 
     private Context mContext;
     private List<Doctor> doctorsList = new ArrayList<>();
@@ -51,6 +51,7 @@ public class DoctorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_doctor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRealmConfig = new RealmConfiguration
                 .Builder(this)
@@ -77,7 +78,7 @@ public class DoctorActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         final RealmResults<DoctorRealm> doctorRealms = getRealmResults();
-       // initiateApi(recyclerView);
+       initiateApi(recyclerView);
         if (doctorRealms.size() == 0){
             initiateApi(recyclerView);
         }else {
@@ -100,7 +101,6 @@ public class DoctorActivity extends AppCompatActivity {
                     Log.d(TAG, "Error "+response.errorBody());
                 }
             }
-
             @Override
             public void onFailure(Call<List<Doctor>> call, Throwable t) {
 

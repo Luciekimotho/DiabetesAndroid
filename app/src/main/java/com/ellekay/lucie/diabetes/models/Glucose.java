@@ -1,6 +1,11 @@
 package com.ellekay.lucie.diabetes.models;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
+
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 
 
@@ -17,7 +22,7 @@ public class Glucose extends RealmObject {
 
     public String timePeriod;
 
-    public String timeOfDay;
+    public Date timeOfDay;
 
     public String action;
 
@@ -55,11 +60,11 @@ public class Glucose extends RealmObject {
         this.timePeriod = timePeriod;
     }
 
-    public String getTimeOfDay() {
+    public Date getTimeOfDay() {
         return timeOfDay;
     }
 
-    public void setTimeOfDay(String timeOfDay) {
+    public void setTimeOfDay(Date timeOfDay) {
         this.timeOfDay = timeOfDay;
     }
 

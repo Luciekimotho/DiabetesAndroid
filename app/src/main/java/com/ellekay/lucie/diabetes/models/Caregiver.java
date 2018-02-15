@@ -13,6 +13,10 @@ public class Caregiver {
     @Expose
     private int id;
 
+    @SerializedName("user")
+    @Expose
+    private User user;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -31,6 +35,8 @@ public class Caregiver {
 
     @Override
     public String toString() {
+        email = user.getEmail();
+        name = user.getName();
         return "Caregiver{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -38,6 +44,10 @@ public class Caregiver {
                 ", phone='" + phone + '\'' +
                 ", relation='" + relation + '\'' +
                 '}';
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public int getId() {
@@ -49,7 +59,7 @@ public class Caregiver {
     }
 
     public String getName() {
-        return name;
+        return user.getName();
     }
 
     public void setName(String name) {
@@ -57,7 +67,7 @@ public class Caregiver {
     }
 
     public String getEmail() {
-        return email;
+        return user.getEmail();
     }
 
     public void setEmail(String email) {

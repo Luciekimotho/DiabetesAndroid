@@ -17,6 +17,8 @@ import com.ellekay.lucie.diabetes.models.Glucose;
 import com.ellekay.lucie.diabetes.models.Readings;
 import com.ellekay.lucie.diabetes.views.DoctorDetail;
 
+import org.joda.time.DateTime;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,13 +66,13 @@ public class GlucoseAdapter  extends RecyclerView.Adapter<GlucoseAdapter.MyViewH
         holder.timePeriod.setText(mRealmObjects.get(position).getTimePeriod());
         //holder.date.setText(mRealmObjects.get(position).getTimeOfDay());
 
-        String date = mRealmObjects.get(position).getTimeOfDay();
-        String format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //In which you need put here
+        Date date = mRealmObjects.get(position).getTimeOfDay();
+        String format = "EEE MMM dd HH:mm:ss zzz yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-        Log.d(TAG, date);
+        Log.d(TAG, date.toString());
 
         try {
-            Date newDate = sdf.parse(date);
+            Date newDate = sdf.parse(date.toString());
             String format2 = "dd/MM/yyyy HH:mm";
             SimpleDateFormat sdf2 = new SimpleDateFormat(format2, Locale.US);
             holder.date.setText(sdf2.format(newDate));
